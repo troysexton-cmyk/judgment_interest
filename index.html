@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federal Judgment Interest Rate Lookup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #faf9f7;
+            --text: #1a1a1a;
+            --text-muted: #6b6b6b;
+            --accent: #2d4a3e;
+            --accent-light: #e8eeeb;
+            --border: #e0ddd8;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 520px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-family: 'Crimson Pro', serif;
+            font-weight: 500;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        input[type="date"]:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background: #243d33;
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.99);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: var(--accent-light);
+            border: 1px solid var(--border);
+        }
+
+        .result.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-rate {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            line-height: 1.1;
+        }
+
+        .result-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+        }
+
+        .result-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .error {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .error .result-rate {
+            font-size: 1.1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            color: #991b1b;
+        }
+
+        .loading-status {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .loading-status.error {
+            color: #991b1b;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            max-width: 400px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            .card {
+                padding: 1.75rem;
+            }
+            
+            .result-rate {
+                font-size: 2.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Federal Judgment Interest Rate</h1>
+            <p class="subtitle">28 U.S.C. § 1961 Post-Judgment Rate Lookup</p>
+        </header>
+
+        <div class="loading-status" id="loading-status">
+            <span class="spinner"></span>Loading current rates from Federal Reserve...
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <label for="judgment-date">Judgment Date</label>
+                <input type="date" id="judgment-date" required disabled>
+            </div>
+            <button onclick="lookupRate()" id="lookup-btn" disabled>Find Interest Rate</button>
+        </div>
+
+        <div class="result" id="result">
+            <div class="result-label">Applicable Rate</div>
+            <div class="result-rate" id="rate-display"></div>
+            <div class="result-date" id="date-display"></div>
+            <div class="result-note" id="result-note"></div>
+        </div>
+
+        <footer>
+            Rates are based on the weekly average 1-year constant maturity Treasury yield published by the 
+            <a href="https://www.federalreserve.gov/releases/H15/" target="_blank" rel="noopener">Federal Reserve</a>. 
+            This tool is for informational purposes only.
+        </footer>
+    </div>
+
+    <script>
+        let rateData = {};
+        let weekEndings = [];
+
+        // Fetch rates from our API on page load
+        async function loadRates() {
+            const statusEl = document.getElementById('loading-status');
+            const dateInput = document.getElementById('judgment-date');
+            const lookupBtn = document.getElementById('lookup-btn');
+            
+            try {
+                const response = await fetch('/api/rates');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load rates');
+                }
+                
+                rateData = await response.json();
+                weekEndings = Object.keys(rateData).sort();
+                
+                // Enable the form
+                dateInput.disabled = false;
+                lookupBtn.disabled = false;
+                statusEl.style.display = 'none';
+                
+                // Set default date to today
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                dateInput.value = `${year}-${month}-${day}`;
+                
+            } catch (error) {
+                console.error('Error loading rates:', error);
+                statusEl.innerHTML = 'Unable to load current rates. Please refresh the page to try again.';
+                statusEl.classList.add('error');
+            }
+        }
+
+        function parseDate(dateStr) {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        function formatDate(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function findApplicableRate(judgmentDateStr) {
+            const judgmentDate = parseDate(judgmentDateStr);
+            
+            let applicableWeekEnding = null;
+            
+            for (let i = weekEndings.length - 1; i >= 0; i--) {
+                const weekEndingDate = parseDate(weekEndings[i]);
+                const effectiveStart = new Date(weekEndingDate);
+                effectiveStart.setDate(effectiveStart.getDate() + 3);
+                
+                if (judgmentDate >= effectiveStart) {
+                    applicableWeekEnding = weekEndings[i];
+                    break;
+                }
+            }
+            
+            if (applicableWeekEnding) {
+                return {
+                    rate: rateData[applicableWeekEnding],
+                    weekEnding: applicableWeekEnding
+                };
+            }
+            
+            return null;
+        }
+
+        function lookupRate() {
+            const dateInput = document.getElementById('judgment-date');
+            const resultDiv = document.getElementById('result');
+            const rateDisplay = document.getElementById('rate-display');
+            const dateDisplay = document.getElementById('date-display');
+            const resultNote = document.getElementById('result-note');
+            
+            if (!dateInput.value) {
+                resultDiv.classList.add('visible');
+                resultDiv.classList.remove('error');
+                rateDisplay.textContent = 'Please enter a date';
+                dateDisplay.textContent = '';
+                resultNote.textContent = '';
+                setTimeout(() => {
+                    resultDiv.classList.add('error');
+                }, 10);
+                return;
+            }
+            
+            const judgmentDate = parseDate(dateInput.value);
+            const result = findApplicableRate(dateInput.value);
+            
+            resultDiv.classList.remove('error');
+            
+            if (result) {
+                resultDiv.classList.add('visible');
+                rateDisplay.textContent = result.rate.toFixed(2) + '%';
+                dateDisplay.textContent = 'For judgment entered on ' + formatDate(judgmentDate);
+                resultNote.textContent = 'Based on the 1-year Treasury yield for week ending ' + formatDate(parseDate(result.weekEnding)) + '. This rate remains fixed for the duration of the judgment.';
+            } else {
+                resultDiv.classList.add('visible', 'error');
+                rateDisplay.textContent = 'Date outside available data range. The Federal Reserve provides approximately 20 years of historical data.';
+                dateDisplay.textContent = '';
+                resultNote.textContent = '';
+            }
+        }
+
+        // Allow Enter key to trigger lookup
+        document.getElementById('judgment-date').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                lookupRate();
+            }
+        });
+
+        // Load rates when page loads
+        loadRates();
+    </script>
+</body>
+</html>
