@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More Information | Federal Judgment Interest Rate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #faf9f7;
+            --text: #1a1a1a;
+            --text-muted: #6b6b6b;
+            --accent: #2d4a3e;
+            --accent-light: #e8eeeb;
+            --border: #e0ddd8;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 680px;
+            width: 100%;
+        }
+
+        .back-link {
+            display: inline-block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .back-link::before {
+            content: '← ';
+        }
+
+        .content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 3rem;
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            font-weight: 500;
+            font-size: 1.4rem;
+            letter-spacing: -0.02em;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .disclaimer {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1.5rem;
+            }
+            
+            .content {
+                padding: 2rem 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">Back to Current Rate</a>
+
+        <div class="content">
+            <h2>What is this about?</h2>
+            <p>I'm trying to make it easier to calculate the correct amount of interest on federal civil judgments. That's it.</p>
+
+            <h2>Who am I?</h2>
+            <p>I'm Troy Sexton, an attorney in Portland, Oregon. I'm a partner at <a href="https://elevatelawpdx.com/people/troy-g-sexton/" target="_blank" rel="noopener">Elevate Law Group</a>. I practice business litigation, weird bankruptcy, commercial real property transactions, and anti-SLAPP litigation in state and federal courts.</p>
+            <p class="disclaimer">This site talks about the legal aspects of judgment interest, but it doesn't create a legal relationship with you. I'm not your lawyer. I think that the information here is reliable, but not guaranteed. It might be wrong for many reasons, and you should talk to your own attorney (not me) about these issues.</p>
+
+            <h2>Give me more information, please.</h2>
+            <p>Federal post judgment interest calculations are unnecessarily complex compared to most state judgment interest calculations. In Oregon state court (where I predominantly practice) judgment interest is 9%. That's it. In Washington, it's 12%. That's it. A judgment entered in Oregon federal court is going to accrue a very different interest rate even if the judge applied Oregon law. This means that a creditor needs to calculate the amount of interest based on the date of the judgment. Technically, the interest rate is equal to the "rate equal to the weekly average 1-year constant maturity Treasury yield, as published by the Board of Governors of the Federal Reserve System, for the calendar week preceding the date of the judgment." 28 USC 1961.</p>
+
+            <p>It's a policy decision to make interest fixed or variable. Fixed interest is easier to calculate, easier to pay, reduces costs, and reduces the likelihood of error and disputes between the parties based on how to interpret the amount of interest that should be charged. Variable interest aligns the interest rate to actual economic factors at the time of the judgment.</p>
+            
+            <p>One of the problems is that the rate is variable to the date of entry, and then it becomes fixed on that rate for the life of the judgment. That is stupid. Market interest rates continue to change, and if they go up after entry, it becomes more economically efficient to not pay a judgment. Why would I pay a $100,000 judgment that costs me $1,000 per year in interest when I can take that same $100,000 and earn a multiple of that interest cost by keeping it in a bank? Of course, the opposite is true as well. If a judgment is entered when interest rates are high, and they later drop, then judgment debtors should rush to pay judgments because the cost of nonpayment quickly gets expensive. But that result is probably a good thing, because judgments should be paid. That's the whole point of getting one.</p>
+
+            <p>By making the interest rate variable, federal law introduces several complicating factors, and makes things like this website necessary.</p>
+        </div>
+    </div>
+</body>
+</html>
